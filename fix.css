@@ -1,0 +1,17 @@
+@media (max-width: 768px) {
+  .title-layer {
+    top: 0 !important;
+    height: auto !important;
+    padding-top: 10vh !important;
+    align-items: flex-start !important;
+  }
+  .hunt-button-container {
+    top: 40vh !important;
+  }
+  .scene-container {
+    height: 100vh !important;
+  }
+  .pokemon-ball-container {
+    height: 60vh !important;
+  }
+}

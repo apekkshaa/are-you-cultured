@@ -1,0 +1,9 @@
+/* Add to src/attacks.css */
+@media (max-width: 768px) {
+  .thunderbolt-attack {
+    width: 90vw !important;
+    height: 15vh !important;
+    top: 30% !important;
+    right: 50% !important;
+  }
+}

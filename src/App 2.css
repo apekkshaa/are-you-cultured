@@ -1,0 +1,152 @@
+.landing {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 2rem;
+  background:
+    radial-gradient(circle at 14% 18%, rgba(255, 212, 87, 0.35), transparent 42%),
+    radial-gradient(circle at 86% 16%, rgba(64, 119, 241, 0.26), transparent 44%),
+    linear-gradient(145deg, #fff6d8 0%, #ffe39e 42%, #e9bc60 100%);
+}
+
+.hero {
+  width: min(1060px, 100%);
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.92), rgba(255, 245, 208, 0.88));
+  border: 1px solid rgba(20, 30, 58, 0.22);
+  border-radius: 24px;
+  box-shadow:
+    0 16px 35px rgba(22, 31, 64, 0.24),
+    0 4px 0 rgba(22, 31, 64, 0.16);
+  padding: 1.1rem 1.1rem 1.45rem;
+  backdrop-filter: blur(8px);
+}
+
+.hero-topline {
+  text-align: center;
+  margin-bottom: 0.75rem;
+  font-size: 0.82rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-weight: 900;
+  color: #315edb;
+  opacity: 0.9;
+}
+
+.stage3d {
+  position: relative;
+  width: 100%;
+  height: clamp(360px, 56vw, 560px);
+  border-radius: 18px;
+  overflow: hidden;
+  border: 2px solid rgba(17, 26, 52, 0.8);
+  background:
+    radial-gradient(circle at 50% 12%, rgba(255, 255, 255, 0.4), transparent 45%),
+    linear-gradient(180deg, #7fb0ff 0%, #70a3f4 56%, #5cb74c 56%, #56a844 100%);
+}
+
+.stage3d canvas {
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+}
+
+.flash-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 72% 52%, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0) 52%),
+    radial-gradient(circle at 72% 52%, rgba(127, 200, 255, 0.85), transparent 62%);
+  opacity: 0;
+  mix-blend-mode: screen;
+  animation: flashHit 7s linear infinite;
+}
+
+.impact-title {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: fit-content;
+  height: fit-content;
+  font-size: clamp(2rem, 6vw, 5rem);
+  line-height: 0.92;
+  text-transform: uppercase;
+  font-weight: 900;
+  letter-spacing: 0.02em;
+  color: #ffd74f;
+  text-shadow:
+    -4px -4px 0 #2956d6,
+    4px -4px 0 #2956d6,
+    -4px 4px 0 #2956d6,
+    4px 4px 0 #2956d6,
+    0 8px 24px rgba(17, 26, 52, 0.45);
+  transform: translateY(12px) scale(0.4);
+  opacity: 0;
+  pointer-events: none;
+  animation: titleReveal 7s cubic-bezier(0.19, 1, 0.22, 1) infinite;
+}
+
+.subtitle {
+  margin: 0.95rem 0 0;
+  text-align: center;
+  font-size: clamp(0.95rem, 2vw, 1.2rem);
+  font-weight: 700;
+  color: #182243;
+  opacity: 0.9;
+}
+
+@keyframes flashHit {
+  0%,
+  58%,
+  100% {
+    opacity: 0;
+  }
+  61% {
+    opacity: 0.95;
+  }
+  66% {
+    opacity: 0;
+  }
+}
+
+@keyframes titleReveal {
+  0%,
+  60% {
+    opacity: 0;
+    transform: translateY(12px) scale(0.4);
+  }
+  68% {
+    opacity: 1;
+    transform: translateY(-4px) scale(1.09);
+  }
+  76%,
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (max-width: 768px) {
+  .landing {
+    padding: 1rem;
+  }
+
+  .hero {
+    border-radius: 18px;
+    padding: 0.8rem 0.8rem 1.15rem;
+  }
+
+  .stage3d {
+    height: 380px;
+    border-radius: 14px;
+  }
+
+  .impact-title {
+    text-shadow:
+      -3px -3px 0 #2956d6,
+      3px -3px 0 #2956d6,
+      -3px 3px 0 #2956d6,
+      3px 3px 0 #2956d6,
+      0 8px 18px rgba(17, 26, 52, 0.4);
+  }
+}

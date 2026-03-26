@@ -1,0 +1,11 @@
+/* Realistic Middle-ground Forest */
+.vector-mountains {
+  top: 15%;
+  height: 55%;
+  background: url('https://images.unsplash.com/photo-1425913397330-cf8af2ff40a1?ixlib=rb-4.0.3&auto=format&fit=crop&w=2560&q=80') center bottom / cover no-repeat;
+  mask-image: linear-gradient(to top, rgba(0,0,0,1) 50%, rgba(0,0,0,0) 100%);
+  -webkit-mask-image: linear-gradient(to top, rgba(0,0,0,1) 50%, rgba(0,0,0,0) 100%);
+  z-index: 2;
+  transform: translateZ(-150px) scale(1.1);
+  filter: brightness(0.6) sepia(1.2) hue-rotate(20deg);
+}
