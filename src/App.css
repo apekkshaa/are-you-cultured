@@ -21,7 +21,7 @@ body {
   height: 100dvh;
   overflow: hidden;
   background: white;
-  container-type: inline-size;
+  container-type: size;
   perspective: 1000px;
 }
 
@@ -72,15 +72,15 @@ body {
 .player-patch {
   bottom: -5%;
   left: 5%;
-  width: 40cqw;
-  height: 25cqh;
+  width: 40vw;
+  height: 25vh;
 }
 
 .enemy-patch {
   bottom: 10%;
   right: 8%;
-  width: 30cqw;
-  height: 20cqh;
+  width: 30vw;
+  height: 20vh;
 }
 
 /* Shadows */
@@ -105,7 +105,7 @@ body {
 }
 
 .charizard {
-  width: 25cqw;
+  width: 25vw;
   top: 15%;
   right: 15%;
   transform: scaleX(-1);
@@ -113,7 +113,7 @@ body {
 }
 
 .snorlax {
-  width: 30cqw;
+  width: 30vw;
   top: 40%;
   left: 10%;
   animation: breath 4s ease-in-out infinite;
@@ -124,7 +124,7 @@ body {
   position: absolute;
   right: 15%;
   bottom: 20%;
-  width: 15cqw;
+  width: 15vw;
   z-index: 20; /* Increased z-index */
   transform: translateZ(50px);
 }
@@ -143,7 +143,7 @@ body {
   position: absolute;
   left: 3%;
   bottom: 0%;
-  width: 28cqw; /* Increased size */
+  width: 28vw; /* Increased size */
   z-index: 30;
   transform-origin: bottom center;
   transform: translateZ(100px);
@@ -165,9 +165,9 @@ body {
 /* Pokeball */
 .projectile-wrapper {
   position: absolute;
-  left: 18cqw;
-  bottom: 45cqh;
-  width: 5cqw;
+  left: 18vw;
+  bottom: 45vh;
+  width: 5vw;
   aspect-ratio: 1;
   z-index: 15;
   opacity: 0;
@@ -239,7 +239,7 @@ body {
 
 .projectile-shadow {
   position: absolute;
-  bottom: -45cqh;
+  bottom: -45vh;
   left: 0;
   width: 100%;
   height: 15px;
@@ -302,8 +302,8 @@ body {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 1cqw;
-  height: 1cqw;
+  width: 1vw;
+  height: 1vw;
   transform: translate(-50%, -50%);
   background: radial-gradient(circle, #fff 10%, #ffd645 50%, rgba(255,214,69,0) 80%);
   border-radius: 50%;
@@ -334,7 +334,7 @@ body {
 /* TITLE APPEARANCE */
 .title-layer {
   position: absolute;
-  top: -10cqh; /* Lift it slightly out of the foreground leaves */
+  top: -5vh; /* Adjusted lift based on reference */
   left: 0;
   width: 100%;
   height: 100%;
@@ -347,21 +347,22 @@ body {
 }
 
 .main-title {
-  font-size: 8cqw;
+  font-family: 'Arial Black', Arial, sans-serif;
+  font-size: clamp(3rem, 7.5vw, 6.5rem);
   font-weight: 900;
   font-style: italic;
-  color: #ffde00;
+  color: #ffcb05; /* Pokémon yellow */
   text-transform: uppercase;
-  letter-spacing: 2px;
-  -webkit-text-stroke: 0.4cqw #3b4cca;
+  letter-spacing: 2px; 
+  -webkit-text-stroke: min(0.4vw, 5px) #3355a5; /* Thicker Pokémon blue stroke */
   text-shadow: 
-    0.6cqw 0.6cqw 0px #3b4cca,
-    1cqw 1cqw 2cqw rgba(0,0,0,0.6);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  line-height: 1.1;
+    min(0.8vw, 10px) min(0.8vw, 10px) 0px #3355a5, /* Deeper Pokémon blue solid drop shadow */
+    0 0 15px rgba(0,0,0,0.6); /* Slightly stronger soft shadow */
+  display: inline-block;
+  text-align: center;
+  line-height: 1; /* Tighter line height */
   opacity: 0;
+  width: 100%;
 }
 
 .phase-impact .main-title,
@@ -376,33 +377,47 @@ body {
   animation: slide-up-fade 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-.word.w1 { animation-delay: 0.1s; }
-.word.w2 { animation-delay: 0.25s; font-size: 5cqw; color: #f7f5ed; -webkit-text-stroke: 1px rgba(212, 175, 55, 0.8); text-shadow: 0 0 20px rgba(212, 175, 55, 0.5);}
-.word.w3 { animation-delay: 0.4s; font-size: 10cqw; }
+.word.w1 { 
+  animation-delay: 0.1s; 
+  font-size: inherit; 
+}
+.word.w2 { 
+  animation-delay: 0.25s; 
+  font-size: min(3.5vw, 2.5rem); 
+  color: #ffea8a; /* Pale yellow */
+  -webkit-text-stroke: 0px; /* No stroke on 'THAT' */
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.5); 
+  letter-spacing: 2px; 
+  margin: -1vh 0; /* Pull it much closer to CATCH and PERSONALITY */
+}
+.word.w3 { 
+  animation-delay: 0.4s; 
+  font-size: inherit; 
+}
 
 /* Keyframes */
 
 @keyframes enter-trainer-modern {
-  0% { transform: translateX(-15cqw) scale(0.9) skewX(10deg); opacity: 0; filter: blur(5px); }
-  60% { transform: translateX(2cqw) scale(1.02) skewX(-2deg); opacity: 1; filter: blur(0px); }
+  0% { transform: translateX(-15vw) scale(0.9) skewX(10deg); opacity: 0; filter: blur(5px); }
+  60% { transform: translateX(2vw) scale(1.02) skewX(-2deg); opacity: 1; filter: blur(0px); }
   100% { transform: translateX(0) scale(1) skewX(0deg); opacity: 1; }
 }
 
 @keyframes pika-idle {
   0%, 100% { transform: scale(1) translateY(0); }
-  50% { transform: scale(1.02) translateY(1cqh); }
+  50% { transform: scale(1.02) translateY(1vh); }
 }
 
 @keyframes throw-action-modern {
-  0% { transform: rotateZ(-5deg) scale(1.02) translateY(1cqh); }
-  30% { transform: rotateZ(-20deg) scale(1.05) translateY(2cqh) translateX(-3cqw); }
-  100% { transform: rotateZ(15deg) scale(0.95) translateY(0) translateX(4cqw); filter: blur(1px); }
+  0% { transform: rotateZ(-5deg) scale(1.02) translateY(1vh); }
+  30% { transform: rotateZ(-20deg) scale(1.05) translateY(2vh) translateX(-3vw); }
+  100% { transform: rotateZ(15deg) scale(0.95) translateY(0) translateX(4vw); filter: blur(1px); }
 }
 
 @keyframes throw-arc {
   0% { transform: translate(0, 0) scale(1); }
-  50% { transform: translate(25cqw, -10cqh) scale(0.8); }
-  100% { transform: translate(55cqw, 20cqh) scale(0.6); }
+  50% { transform: translate(25vw, -10vh) scale(0.8); }
+  100% { transform: translate(55vw, 20vh) scale(0.6); }
 }
 
 @keyframes spin {
@@ -412,14 +427,14 @@ body {
 
 @keyframes shadow-arc {
   0% { transform: translate(0, 0) scale(1); opacity: 1; }
-  50% { transform: translate(25cqw, 10cqh) scale(0.8); opacity: 0.6; }
-  100% { transform: translate(55cqw, 40cqh) scale(0.6); opacity: 0.8; }
+  50% { transform: translate(25vw, 10vh) scale(0.8); opacity: 0.6; }
+  100% { transform: translate(55vw, 40vh) scale(0.6); opacity: 0.8; }
 }
 
 @keyframes pokemon-hit {
-  0% { transform: scale(1); filter: brightness(1) drop-shadow(0 1cqw 2cqw rgba(0,0,0,0.4)); }
-  15% { transform: scale(1.3) translateY(-3cqh) rotate(8deg); filter: brightness(2.5) blur(2px) drop-shadow(0 2cqw 4cqw rgba(0,0,0,0.6));}
-  100% { transform: scale(0.9) translateY(0) rotate(-5deg); filter: brightness(1) drop-shadow(0 1cqw 2cqw rgba(0,0,0,0.4)); opacity: 1; }
+  0% { transform: scale(1); filter: brightness(1) drop-shadow(0 1vw 2vw rgba(0,0,0,0.4)); }
+  15% { transform: scale(1.3) translateY(-3vh) rotate(8deg); filter: brightness(2.5) blur(2px) drop-shadow(0 2vw 4vw rgba(0,0,0,0.6));}
+  100% { transform: scale(0.9) translateY(0) rotate(-5deg); filter: brightness(1) drop-shadow(0 1vw 2vw rgba(0,0,0,0.4)); opacity: 1; }
 }
 
 @keyframes pokeball-trail {
@@ -436,10 +451,10 @@ body {
 
 @keyframes camera-shake {
   0%, 100% { transform: translate(0, 0) scale(1.05); }
-  20% { transform: translate(-1.5cqw, 1.5cqh) scale(1.05) rotate(-1.5deg); }
-  40% { transform: translate(1.5cqw, -1.5cqh) scale(1.05) rotate(1.5deg); }
-  60% { transform: translate(-1cqw, 1cqh) scale(1.05) rotate(-0.5deg); }
-  80% { transform: translate(1cqw, -1cqh) scale(1.05) rotate(0.5deg); }
+  20% { transform: translate(-1.5vw, 1.5vh) scale(1.05) rotate(-1.5deg); }
+  40% { transform: translate(1.5vw, -1.5vh) scale(1.05) rotate(1.5deg); }
+  60% { transform: translate(-1vw, 1vh) scale(1.05) rotate(-0.5deg); }
+  80% { transform: translate(1vw, -1vh) scale(1.05) rotate(0.5deg); }
 }
 
 @keyframes flash-fade {
@@ -448,7 +463,7 @@ body {
 }
 
 @keyframes slide-up-fade {
-  0% { transform: translateY(10cqh) scale(0.9); opacity: 0; filter: blur(8px); }
+  0% { transform: translateY(10vh) scale(0.9); opacity: 0; filter: blur(8px); }
   100% { transform: translateY(0) scale(1); opacity: 1; filter: blur(0px); }
 }
 /* ====== NEW VISUAL EFFECTS ====== */
@@ -538,7 +553,7 @@ body {
 
 @keyframes shoot-spark {
   0% { transform: translate(-50%, -100%) rotate(var(--r)) translateY(0) scaleY(1); opacity: 1; }
-  100% { transform: translate(-50%, -100%) rotate(var(--r)) translateY(-15cqw) scaleY(0); opacity: 0; }
+  100% { transform: translate(-50%, -100%) rotate(var(--r)) translateY(-15vw) scaleY(0); opacity: 0; }
 }
 
 /* Dynamically setting CSS variables for sparks to inherit for transform */
@@ -615,7 +630,7 @@ body {
   /* Anchor to Pikachu and flow left */
   right: 60%; 
   width: 80vw;
-  height: 20cqh;
+  height: 20vh;
   pointer-events: none;
   z-index: 100;
   transform-origin: right center;
@@ -722,7 +737,7 @@ body {
   /* Anchor to Pikachu and flow left */
   right: 60%; 
   width: 80vw;
-  height: 20cqh;
+  height: 20vh;
   pointer-events: none;
   z-index: 100;
   transform-origin: right center;
@@ -769,7 +784,7 @@ body {
 /* ====== HUNT BUTTON ====== */
 .hunt-button-container {
   position: absolute;
-  top: calc(50vh + 15vh); /* Switched away from cqh to vh, and adjusted slightly up since it's out of parallax */
+  top: calc(50vh + 15vh); /* Switched away from vh to vh, and adjusted slightly up since it's out of parallax */
   left: 50vw;
   opacity: 0;
   animation: pop-in-ball 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
@@ -819,7 +834,7 @@ body {
   font-family: 'Pokemon Solid', sans-serif;
   letter-spacing: 4px;
   -webkit-text-stroke: 1px #28348c;
-  font-size: clamp(16px, 3cqw, 32px);
+  font-size: clamp(16px, 3vw, 32px);
   color: #ffde00;
   text-shadow: 3px 3px 0 #28348c, -1px -1px 0 #28348c, 1px -1px 0 #28348c, -1px 1px 0 #28348c, 1px 1px 0 #28348c;
   position: static;
@@ -1381,17 +1396,27 @@ body {
   /* Title layout */
   .title-layer {
     top: 0 !important;
-    height: 40vh !important;
+    height: 35vh !important;
     align-items: flex-end !important;
     padding-bottom: 2vh !important;
   }
   
   .main-title {
-    font-size: 10vw !important;
-    line-height: 1.1 !important;
+    font-size: 6.5vw !important; /* Scaled down considerably so PERSONALITY fits */
+    letter-spacing: 0px !important; /* Remove spacing to save horizontal room */
+    line-height: 1 !important;
+    width: 100% !important;
+    -webkit-text-stroke: min(0.5vw, 2px) #3355a5 !important;
+    text-shadow: 
+      min(0.8vw, 4px) min(0.8vw, 4px) 0px #3355a5,
+      0 0 10px rgba(0,0,0,0.6) !important;
   }
 
-  /* Make sure the main hunt button is positioned correctly between title and sprites */
+  .word.w2 {
+    font-size: 4vw !important; /* Slightly larger on mobile for visibility */
+    margin: -0.5vh 0 !important;
+  }
+/* Make sure the main hunt button is positioned correctly between title and sprites */
   .hunt-button-container {
     top: 45vh !important;
     transform: translateX(-50%) scale(0.9) !important;
