@@ -8,140 +8,127 @@ export default function App() {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [carouselIndex, setCarouselIndex] = useState(0);
   const [assignedPokemon, setAssignedPokemon] = useState(null);
+  const [answers, setAnswers] = useState([]);
 
   const starterPokemons = [
     {
       name: "Bulbasaur",
+      tagline: "🧩 You bring order to chaos.",
       image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png",
-      description: "You probably know that Bulbasaur is the very first Pokémon in the Pokédex and carries a plant bulb on its back. But did you know your alignment with Bulbasaur means you have a steady, nurturing cultural personality? You thrive in environments that allow for continuous growth, bringing a calming and dependable presence to your team.",
+      description: "You are a Rules-Follower. Just like Bulbasaur, you have a steady, nurturing cultural personality. You thrive in environments that allow for continuous growth, bringing a calming and dependable presence to your team through structure and clear processes.",
     },
     {
       name: "Charmander",
+      tagline: "🤝 You make teams actually feel like teams.",
       image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/4.png",
-      description: "You probably know that Charmander’s tail flame indicates its health and emotions. But did you know your alignment with Charmander reveals a highly passionate and driven cultural personality? Your spirited energy and loyalty mean you tackle challenges head-on, lighting the way for others even in the darkest of times.",
+      description: "You are Relationship Centric. Just like Charmander, your alignment reveals a highly passionate, driven, and warm cultural personality. Your spirited energy and loyalty mean you tackle challenges head-on, lighting the way for others and prioritizing strong human connections.",
     },
     {
       name: "Squirtle",
+      tagline: "⚡ You make things happen—fast.",
       image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/7.png",
-      description: "You probably know that Squirtle is a Tiny Turtle Pokémon capable of shooting water with incredible force. But did you know your alignment with Squirtle shows a highly adaptable and resilient cultural personality? You flow easily through changing environments and rely on a strong inner shell to protect your core values when things get tough.",
+      description: "You are Direct & Egalitarian. Just like Squirtle, your alignment shows a highly adaptable, straightforward, and resilient cultural personality. You flow easily through changing environments and communicate openly, treating everyone equally no matter the situation.",
     }
   ];
 
   const handleContinue = () => {
-    const randomPokemon = starterPokemons[Math.floor(Math.random() * starterPokemons.length)];
-    setAssignedPokemon(randomPokemon);
+    // Tally answers to find the mode
+    const counts = [0, 0, 0];
+    answers.forEach((ans) => {
+      if (ans >= 0 && ans <= 2) counts[ans]++;
+    });
+
+    let maxIndex = 0;
+    let maxVal = counts[0];
+    if (counts[1] > maxVal) { maxVal = counts[1]; maxIndex = 1; }
+    if (counts[2] > maxVal) { maxVal = counts[2]; maxIndex = 2; }
+
+    const finalPokemon = starterPokemons[maxIndex];
+    setAssignedPokemon(finalPokemon);
     setPhase("pokemon-reveal");
   };
 
   const quizQuestions = [
     {
-      title: "Which of these environments do you prefer?",
+      title: "You’re assigned to a global team project. Your first instinct is:",
       options: [
-        { name: "The Volcano", emoji: "🌋" },
-        { name: "The Ocean", emoji: "🌊" },
-        { name: "The Forest", emoji: "🌲" },
-        { name: "The Cave", emoji: "🦇" },
+        { name: "Clarify roles, deadlines, and expectations", emoji: "📋" },
+        { name: "Get to know teammates before diving into work", emoji: "🤝" },
+        { name: "Start working and align along the way", emoji: "🚀" },
       ],
     },
     {
-      title: "Which trait defines you the most?",
+      title: "In a virtual team meeting, What would you do:",
       options: [
-        { name: "Bravery", emoji: "⚔️" },
-        { name: "Wisdom", emoji: "🦉" },
-        { name: "Loyalty", emoji: "🤝" },
-        { name: "Passion", emoji: "🔥" },
+        { name: "Stick closely to the agenda", emoji: "📝" },
+        { name: "Encourage participation and check how people feel", emoji: "🗣️" },
+        { name: "Focus on decisions and next steps", emoji: "🎯" },
       ],
     },
     {
-      title: "What is your ideal weekend activity?",
+      title: "A teammate disagrees with your approach. You would:",
       options: [
-        { name: "Exploring", emoji: "🗺️" },
-        { name: "Resting", emoji: "🛌" },
-        { name: "Training", emoji: "🏋️" },
-        { name: "Reading", emoji: "📚" },
+        { name: "Refer to data, guidelines, or prior examples", emoji: "📊" },
+        { name: "Try to understand their perspective and maintain harmony", emoji: "🕊️" },
+        { name: "Address it directly and move toward a solution", emoji: "🛠️" },
       ],
     },
     {
-      title: "Choose a time of day.",
+      title: "A company process feels slow and inefficient. You would:",
       options: [
-        { name: "Dawn", emoji: "🌅" },
-        { name: "Noon", emoji: "☀️" },
-        { name: "Dusk", emoji: "🌇" },
-        { name: "Midnight", emoji: "🌌" },
+        { name: "Follow it as defined", emoji: "📜" },
+        { name: "Discuss with the team before changing anything", emoji: "💬" },
+        { name: "Adapt or bypass it to move faster", emoji: "⚡" },
       ],
     },
     {
-      title: "Pick a companion.",
+      title: "When giving feedback, you:",
       options: [
-        { name: "Fierce Dragon", emoji: "🐉" },
-        { name: "Loyal Hound", emoji: "🐕" },
-        { name: "Wise Owl", emoji: "🦉" },
-        { name: "Playful Monkey", emoji: "🐒" },
+        { name: "Focus on clarity and correctness", emoji: "✅" },
+        { name: "Soften your message to maintain the relationship", emoji: "💡" },
+        { name: "Are direct and to the point", emoji: "🏹" },
       ],
     },
     {
-      title: "Which weather speaks to your soul?",
+      title: "You receive unclear instructions from a manager in another country. what would you do:",
       options: [
-        { name: "Thunderstorm", emoji: "⛈️" },
-        { name: "Clear Sky", emoji: "🌤️" },
-        { name: "Snowy", emoji: "🌨️" },
-        { name: "Foggy", emoji: "🌫️" },
+        { name: "Ask for detailed clarification", emoji: "❓" },
+        { name: "Set up a quick call to align expectations", emoji: "📞" },
+        { name: "Make assumptions and proceed", emoji: "🏃" },
       ],
     },
     {
-      title: "What's your preferred approach to an obstacle?",
+      title: "In team settings, you naturally take the role of:",
       options: [
-        { name: "Charge head-on", emoji: "🏃" },
-        { name: "Find a way around", emoji: "🧗" },
-        { name: "Study it deeply", emoji: "🔎" },
-        { name: "Ask for help", emoji: "🗣️" },
+        { name: "Organizer (structure, planning)", emoji: "🗂️" },
+        { name: "Connector (relationships, alignment)", emoji: "🔗" },
+        { name: "Driver (execution, momentum)", emoji: "🏎️" },
       ],
     },
     {
-      title: "Pick a color palette.",
+      title: "Working across cultures, you believe it’s most important to:",
       options: [
-        { name: "Crimson Red", emoji: "🔴" },
-        { name: "Deep Ocean Blue", emoji: "🔵" },
-        { name: "Forest Green", emoji: "🟢" },
-        { name: "Shadow Black", emoji: "⚫" },
+        { name: "Follow clear processes and shared standards", emoji: "📐" },
+        { name: "Build trust and mutual understanding", emoji: "🤝" },
+        { name: "Stay flexible and focus on outcomes", emoji: "🌊" },
       ],
     },
     {
-      title: "What kind of music soothes you?",
+      title: "What challenges you most in global teams?",
       options: [
-        { name: "Upbeat Pop", emoji: "🥁" },
-        { name: "Classical Strings", emoji: "🎻" },
-        { name: "Nature Sounds", emoji: "🍃" },
-        { name: "Lo-fi Beats", emoji: "📻" },
+        { name: "Lack of clarity or structure", emoji: "🧩" },
+        { name: "Miscommunication or strained relationships", emoji: "🚧" },
+        { name: "Slow decision-making", emoji: "🕰️" },
       ],
     },
     {
-      title: "Choose a magical artifact.",
+      title: "A successful collaboration means:",
       options: [
-        { name: "Wand", emoji: "🪄" },
-        { name: "Crystal Ball", emoji: "🔮" },
-        { name: "Ancient Sword", emoji: "🗡️" },
-        { name: "Invisibility Cloak", emoji: "🧥" },
+        { name: "Work is done correctly and consistently", emoji: "🏆" },
+        { name: "Everyone feels valued and aligned", emoji: "💖" },
+        { name: "Goals are achieved efficiently", emoji: "✔️" },
       ],
-    },
-    {
-      title: "What's your biggest fear?",
-      options: [
-        { name: "Failure", emoji: "📉" },
-        { name: "Isolation", emoji: "🚪" },
-        { name: "The Unknown", emoji: "❓" },
-        { name: "Betrayal", emoji: "💔" },
-      ],
-    },
-    {
-      title: "How do you celebrate a victory?",
-      options: [
-        { name: "Loud Party", emoji: "🎉" },
-        { name: "Quiet Reflection", emoji: "🍵" },
-        { name: "Next Challenge", emoji: "🚀" },
-        { name: "Sharing with friends", emoji: "🥂" },
-      ],
-    },
+    }
   ];
 
   useEffect(() => {
@@ -171,7 +158,7 @@ export default function App() {
       setPhase("transitioning-text");
       // If we already have the trainer name, start the 6s timeout right away
       if (trainerContext) {
-        setTimeout(() => setPhase("questions"), 2000);
+        setTimeout(() => setPhase("pre-questions"), 3500);
       }
     }, 1200); // Wait for the iris zoom out to finish
   };
@@ -293,6 +280,7 @@ export default function App() {
       {/* Starry Transition Overlay */}
       {(phase === "transitioning-zoom" ||
         phase === "transitioning-text" ||
+        phase === "pre-questions" ||
         phase === "questions" ||
         phase === "calculating-result" ||
         phase === "final-result" ||
@@ -310,7 +298,7 @@ export default function App() {
                       e.preventDefault();
                       if (trainerNameInput.trim()) {
                         setTrainerContext(trainerNameInput.trim());
-                        setTimeout(() => setPhase("questions"), 2000);
+                        setTimeout(() => setPhase("pre-questions"), 3500);
                       }
                     }}
                   >
@@ -351,6 +339,26 @@ export default function App() {
                     </h3>
                   </div>
                 )}
+              </div>
+            )}
+
+            {phase === "pre-questions" && (
+              <div className="transition-content fade-in-section" style={{ minHeight: "50vh", display: "flex", justifyContent: "center", gap: "15px" }}>
+                <h2 className="hp-logo-text" style={{ fontSize: "clamp(1.6rem, 4vw, 3rem)", textAlign: "center", marginBottom: "0", color: "#ffcb05", padding: "0 20px" }}>
+                  Are you the Planner, the Connector, or the Doer?
+                </h2>
+                <div style={{ color: "#ffffff", textAlign: "center", maxWidth: "90%", width: "1200px", fontSize: "clamp(1rem, 2vw, 1.3rem)", lineHeight: "1.6", marginBottom: "2vh", padding: "0 20px" }}>
+                  <strong style={{ color: "#ffde00", letterSpacing: "1px", display: "inline-block", marginBottom: "1vh" }}>Instructions:</strong>
+                  <br />
+                  Pick the option that feels most like your natural instinct and not what you wish you’d do.
+                </div>
+                <button
+                  className="continue-action-btn"
+                  onClick={() => setPhase("questions")}
+                  style={{ marginTop: "0", animation: "pulse 2s infinite" }}
+                >
+                  START HUNT
+                </button>
               </div>
             )}
 
@@ -412,6 +420,8 @@ export default function App() {
                     <button
                       className="select-btn"
                       onClick={() => {
+                        const newAnswers = [...answers, carouselIndex];
+                        setAnswers(newAnswers);
                         if (currentQuestionIndex < quizQuestions.length - 1) {
                           setCurrentQuestionIndex((prev) => prev + 1);
                           setCarouselIndex(0);
@@ -491,6 +501,7 @@ export default function App() {
                 </div>
                 <h1 className="house-title">{assignedPokemon.name.toUpperCase()}</h1>
                 <p className="house-description">{assignedPokemon.description}</p>
+                {assignedPokemon.tagline && <h3 className="house-tagline" style={{ marginTop: "15px", color: "#ffd700", textShadow: "1px 1px 3px rgba(0,0,0,0.8)", fontSize: "1.2rem", fontWeight: "bold" }}>{assignedPokemon.tagline}</h3>}
                 <button className="continue-action-btn" style={{ marginTop: "2rem" }} onClick={() => setPhase("map-reveal")}>
                   CONTINUE
                 </button>
@@ -526,9 +537,16 @@ export default function App() {
                 <div className="hp-logo-container">
                   <h2 className="hp-logo-text" style={{ fontSize: "clamp(2rem, 5vw, 4rem)" }}>Journey Complete</h2>
                 </div>
-                <h1 className="sorting-decision-text" style={{ maxWidth: "800px", margin: "2rem auto 4rem auto", lineHeight: "1.6" }}>
-                  Congratulations, {trainerContext || "Trainer"}! You are now equipped with your culturally aligned Pokémon and the locations of your Gyms. Step into the world, embrace your traits, and go catch 'em all!
+                <h1 className="sorting-decision-text" style={{ maxWidth: "800px", margin: "2rem auto 2rem auto", lineHeight: "1.6" }}>
+                  Congratulations, {trainerContext || "Trainer"}!<br /><br />
+                  You are now equipped with your culturally aligned Pokémon and the locations of your Gyms.
+                  <span style={{ display: "block", marginTop: "1.5rem", color: "#ffd700", fontSize: "clamp(1.1rem, 2vw, 1.4rem)", fontWeight: "bold" }}>
+                    Be sure to keep track of your partner and Gym locations—you'll need them as you move forward in your journey!
+                  </span>
                 </h1>
+                <p style={{ maxWidth: "600px", margin: "0 auto 4rem auto", color: "#ccc", fontSize: "1.1rem", lineHeight: "1.6", fontStyle: "italic" }}>
+                  Step into the world, embrace your traits, and go catch 'em all!
+                </p>
                 <button className="continue-action-btn" onClick={() => window.location.reload()}>
                   PLAY AGAIN
                 </button>
