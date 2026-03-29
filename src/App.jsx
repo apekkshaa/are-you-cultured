@@ -9,6 +9,7 @@ export default function App() {
   const [carouselIndex, setCarouselIndex] = useState(0);
   const [assignedPokemon, setAssignedPokemon] = useState(null);
   const [answers, setAnswers] = useState([]);
+  const [squads, setSquads] = useState([]);
 
   const starterPokemons = [
     {
@@ -31,7 +32,7 @@ export default function App() {
     }
   ];
 
-  const handleContinue = () => {
+  const handleContinue = async () => {
     // Tally answers to find the mode
     const counts = [0, 0, 0];
     answers.forEach((ans) => {
@@ -45,7 +46,45 @@ export default function App() {
 
     const finalPokemon = starterPokemons[maxIndex];
     setAssignedPokemon(finalPokemon);
-    setPhase("pokemon-reveal");
+    setPhase("pokemon-reveal"); // Move quickly to the next phase
+
+    const userName = trainerContext ? trainerContext.trim() : 'Unknown Trainer';
+
+    try {
+      // 1. Fetch latest data (no-store prevents browser caching issues)
+      const response = await fetch("https://api.restful-api.dev/objects/ff8081819d150699019d3a30bdf14294", {
+        cache: "no-store"
+      });
+      const responseJson = await response.json();
+      let currentData = responseJson.data || [];
+      if (!Array.isArray(currentData)) currentData = [];
+
+      const newEntry = { name: userName, pokemon: finalPokemon.name };
+      // Deduplicate if user clicks multiple times, but allow updating their pokemon
+      const existingUserIndex = currentData.findIndex(entry => entry.name === userName);
+      let dataToSave;
+
+      if (existingUserIndex !== -1) {
+        // Update existing user's pokemon
+        dataToSave = [...currentData];
+        dataToSave[existingUserIndex].pokemon = finalPokemon.name;
+      } else {
+        // Add new user
+        dataToSave = [...currentData, newEntry];
+      }
+
+      // 2. Put back updated data
+      await fetch("https://api.restful-api.dev/objects/ff8081819d150699019d3a30bdf14294", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: "squads", data: dataToSave })
+      });
+
+      // Update local state temporarily
+      setSquads(dataToSave);
+    } catch (err) {
+      console.error("Error syncing squad data:", err);
+    }
   };
 
   const quizQuestions = [
@@ -130,6 +169,18 @@ export default function App() {
       ],
     }
   ];
+
+  // Fetch live squads when showing the squads reveal phase to get other users' updates
+  useEffect(() => {
+    if (phase === "squads-reveal") {
+      fetch("https://api.restful-api.dev/objects/ff8081819d150699019d3a30bdf14294", {
+        cache: "no-store"
+      })
+        .then(res => res.json())
+        .then(resData => setSquads(Array.isArray(resData?.data) ? resData.data : []))
+        .catch(err => console.error("Error fetching squads:", err));
+    }
+  }, [phase]);
 
   useEffect(() => {
     let t1, t2, t3, t4;
@@ -286,6 +337,7 @@ export default function App() {
         phase === "final-result" ||
         phase === "pokemon-reveal" ||
         phase === "map-reveal" ||
+        phase === "squads-reveal" ||
         phase === "ending-page") && (
           <div className="transition-container">
             {phase === "transitioning-text" && (
@@ -526,7 +578,35 @@ export default function App() {
                   />
                 </div>
 
-                <button className="continue-action-btn" style={{ marginTop: "3rem" }} onClick={() => setPhase("ending-page")}>
+                <button className="continue-action-btn" style={{ marginTop: "3rem" }} onClick={() => setPhase("squads-reveal")}>
+                  VIEW SQUADS
+                </button>
+              </div>
+            )}
+
+
+            {phase === "squads-reveal" && (
+              <div className="squads-reveal-container fade-in-section" style={{ width: "90%", maxWidth: "1200px" }}>
+                <div className="hp-logo-container">
+                  <h2 className="hp-logo-text" style={{ fontSize: "clamp(2rem, 5vw, 4rem)", marginBottom: "2rem" }}>Cultural Personality Squads</h2>
+                </div>
+
+                <div style={{ display: "flex", gap: "2rem", justifyContent: "center", flexWrap: "wrap", marginTop: "1rem" }}>
+                  {starterPokemons.map(pokemon => {
+                    const squadMembers = squads.filter(p => p.pokemon === pokemon.name);
+                    return (
+                      <div key={pokemon.name} style={{ background: "rgba(255,255,255,0.05)", padding: "2rem", borderRadius: "15px", flex: "1", minWidth: "250px", textAlign: "center", border: "1px solid rgba(255,215,0,0.3)", boxShadow: "0 4px 15px rgba(0,0,0,0.5)" }}>
+                        <img src={pokemon.image} alt={pokemon.name} style={{ width: "100px", height: "100px", marginBottom: "1rem", filter: "drop-shadow(0 0 10px rgba(255,255,255,0.2))" }} />
+                        <h2 style={{ color: "#ffd700", marginBottom: "1.5rem", fontFamily: "'Playfair Display', serif", fontSize: "1.8rem", textShadow: "1px 1px 3px rgba(0,0,0,0.8)" }}>{pokemon.name}</h2>
+                        <ul style={{ listStyle: "none", padding: 0, margin: 0, fontSize: "1.2rem", color: "#fff", maxHeight: "250px", overflowY: "auto" }}>
+                          {squadMembers.length > 0 ? squadMembers.map((m, i) => <li key={i} style={{ padding: "0.8rem 0", borderBottom: "1px solid rgba(255,255,255,0.1)", letterSpacing: "1px" }}>{m.name}</li>) : <li style={{ padding: "1rem 0", opacity: 0.5, fontStyle: "italic" }}>No members yet</li>}
+                        </ul>
+                      </div>
+                    )
+                  })}
+                </div>
+
+                <button className="continue-action-btn" style={{ marginTop: "4rem" }} onClick={() => setPhase("ending-page")}>
                   FINISH
                 </button>
               </div>
@@ -547,7 +627,15 @@ export default function App() {
                 <p style={{ maxWidth: "600px", margin: "0 auto 4rem auto", color: "#ccc", fontSize: "1.1rem", lineHeight: "1.6", fontStyle: "italic" }}>
                   Step into the world, embrace your traits, and go catch 'em all!
                 </p>
-                <button className="continue-action-btn" onClick={() => window.location.reload()}>
+                <button className="continue-action-btn" onClick={() => {
+                  setPhase('entering');
+                  setTrainerNameInput('');
+                  setTrainerContext('');
+                  setCurrentQuestionIndex(0);
+                  setCarouselIndex(0);
+                  setAssignedPokemon(null);
+                  setAnswers([]);
+                }}>
                   PLAY AGAIN
                 </button>
               </div>
