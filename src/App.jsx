@@ -55,11 +55,14 @@ export default function App() {
 
     try {
       // 1. Fetch latest data (no-store prevents browser caching issues)
-      const response = await fetch("https://api.restful-api.dev/objects/ff8081819d150699019d3a30bdf14294", {
+      const response = await fetch("https://api.jsonbin.io/v3/b/69cacb1c36566621a8627b05/latest", {
+        headers: {
+          "X-Master-Key": "$2a$10$pl7TxXzhwN/jOJAn/Z48q.hOOOiJ1yajg42CJBWaVpsIMixH1yvym"
+        },
         cache: "no-store"
       });
       const responseJson = await response.json();
-      let currentData = responseJson.data || [];
+      let currentData = responseJson.record?.data || [];
       if (!Array.isArray(currentData)) currentData = [];
 
       const newEntry = { name: userName, pokemon: finalPokemon.name };
@@ -77,10 +80,13 @@ export default function App() {
       }
 
       // 2. Put back updated data
-      await fetch("https://api.restful-api.dev/objects/ff8081819d150699019d3a30bdf14294", {
+      await fetch("https://api.jsonbin.io/v3/b/69cacb1c36566621a8627b05", {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name: "squads", data: dataToSave })
+        headers: { 
+          "Content-Type": "application/json",
+          "X-Master-Key": "$2a$10$pl7TxXzhwN/jOJAn/Z48q.hOOOiJ1yajg42CJBWaVpsIMixH1yvym"
+        },
+        body: JSON.stringify({ data: dataToSave })
       });
 
       // Update local state temporarily
@@ -176,11 +182,14 @@ export default function App() {
   // Fetch live squads when showing the squads reveal phase to get other users' updates
   useEffect(() => {
     if (phase === "squads-reveal") {
-      fetch("https://api.restful-api.dev/objects/ff8081819d150699019d3a30bdf14294", {
+      fetch("https://api.jsonbin.io/v3/b/69cacb1c36566621a8627b05/latest", {
+        headers: {
+          "X-Master-Key": "$2a$10$pl7TxXzhwN/jOJAn/Z48q.hOOOiJ1yajg42CJBWaVpsIMixH1yvym"
+        },
         cache: "no-store"
       })
         .then(res => res.json())
-        .then(resData => setSquads(Array.isArray(resData?.data) ? resData.data : []))
+        .then(resData => setSquads(Array.isArray(resData?.record?.data) ? resData.record.data : []))
         .catch(err => console.error("Error fetching squads:", err));
     }
   }, [phase]);
