@@ -39,10 +39,13 @@ export default function App() {
       if (ans >= 0 && ans <= 2) counts[ans]++;
     });
 
-    let maxIndex = 0;
-    let maxVal = counts[0];
-    if (counts[1] > maxVal) { maxVal = counts[1]; maxIndex = 1; }
-    if (counts[2] > maxVal) { maxVal = counts[2]; maxIndex = 2; }
+    const maxVal = Math.max(...counts);
+    const tiedIndices = counts
+      .map((count, index) => count === maxVal ? index : -1)
+      .filter(index => index !== -1);
+
+    // Randomly select one of the tied results
+    const maxIndex = tiedIndices[Math.floor(Math.random() * tiedIndices.length)];
 
     const finalPokemon = starterPokemons[maxIndex];
     setAssignedPokemon(finalPokemon);
@@ -395,14 +398,17 @@ export default function App() {
             )}
 
             {phase === "pre-questions" && (
-              <div className="transition-content fade-in-section" style={{ minHeight: "50vh", display: "flex", justifyContent: "center", gap: "15px" }}>
+              <div className="transition-content fade-in-section" style={{ minHeight: "50vh", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "25px" }}>
                 <h2 className="hp-logo-text" style={{ fontSize: "clamp(1.6rem, 4vw, 3rem)", textAlign: "center", marginBottom: "0", color: "#ffcb05", padding: "0 20px" }}>
                   Are you the Planner, the Connector, or the Doer?
                 </h2>
-                <div style={{ color: "#ffffff", textAlign: "center", maxWidth: "90%", width: "1200px", fontSize: "clamp(1rem, 2vw, 1.3rem)", lineHeight: "1.6", marginBottom: "2vh", padding: "0 20px" }}>
-                  <strong style={{ color: "#ffde00", letterSpacing: "1px", display: "inline-block", marginBottom: "1vh" }}>Instructions:</strong>
-                  <br />
-                  Pick the option that feels most like your natural instinct and not what you wish you’d do.
+                <div style={{ color: "#ffffff", textAlign: "center", maxWidth: "90%", width: "900px", fontSize: "clamp(1rem, 1.5vw, 1.2rem)", lineHeight: "1.6", padding: "0 20px" }}>
+                  <strong style={{ color: "#ffde00", letterSpacing: "1px", display: "inline-block", marginBottom: "1.5vh", fontSize: "1.3em", textTransform: "uppercase" }}>Instructions</strong>
+                  <ul style={{ listStyleType: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "15px", alignItems: "center", textAlign: "center" }}>
+                    <li><span style={{ color: "#ffcb05", marginRight: "8px" }}>•</span> Pick the option that feels most like your natural instinct, not what you wish you'd do.</li>
+                    <li><span style={{ color: "#ffcb05", marginRight: "8px" }}>•</span> Read carefully and choose wisely! You won't be able to travel back to previous questions.</li>
+                    <li><span style={{ color: "#ffcb05", marginRight: "8px" }}>•</span> Keep track of your assigned partner and Gym locations—you'll need them as you move forward in your journey.</li>
+                  </ul>
                 </div>
                 <button
                   className="continue-action-btn"
@@ -586,12 +592,12 @@ export default function App() {
 
 
             {phase === "squads-reveal" && (
-              <div className="squads-reveal-container fade-in-section" style={{ width: "90%", maxWidth: "1200px" }}>
-                <div className="hp-logo-container">
-                  <h2 className="hp-logo-text" style={{ fontSize: "clamp(2rem, 5vw, 4rem)", marginBottom: "2rem" }}>Cultural Personality Squads</h2>
+              <div className="squads-reveal-container fade-in-section" style={{ width: "90%", maxWidth: "1200px", display: "flex", flexDirection: "column", alignItems: "center" }}>
+                <div className="hp-logo-container" style={{ textAlign: "center", width: "100%" }}>
+                  <h2 className="hp-logo-text" style={{ fontSize: "clamp(2rem, 5vw, 4rem)", marginBottom: "2rem", textAlign: "center" }}>Cultural Personality Squads</h2>
                 </div>
 
-                <div style={{ display: "flex", gap: "2rem", justifyContent: "center", flexWrap: "wrap", marginTop: "1rem" }}>
+                <div style={{ display: "flex", gap: "2rem", justifyContent: "center", flexWrap: "wrap", marginTop: "1rem", width: "100%" }}>
                   {starterPokemons.map(pokemon => {
                     const squadMembers = squads.filter(p => p.pokemon === pokemon.name);
                     return (
@@ -628,13 +634,7 @@ export default function App() {
                   Step into the world, embrace your traits, and go catch 'em all!
                 </p>
                 <button className="continue-action-btn" onClick={() => {
-                  setPhase('entering');
-                  setTrainerNameInput('');
-                  setTrainerContext('');
-                  setCurrentQuestionIndex(0);
-                  setCarouselIndex(0);
-                  setAssignedPokemon(null);
-                  setAnswers([]);
+                  window.location.reload();
                 }}>
                   PLAY AGAIN
                 </button>
